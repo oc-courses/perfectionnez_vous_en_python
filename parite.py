@@ -15,6 +15,8 @@ def parse_arguments():
         parser.add_argument("-I","--index", help="""displays information about the Ith mp""")
         parser.add_argument("-g","--groupfirst", help="""displays a graph groupping all the 'g' 
             biggest political parties""")
+        parser.add_argument("-a","--byage", help="""displays a graph for the MPs splitted
+            between those who are over and those who are under the value of --byage""")
         
         return parser.parse_args()
     
@@ -25,15 +27,16 @@ def parse_arguments():
         o.__dict__ = {
             'datafile' : "current_mps.csv",
             'byparty' : False,
-            'info' : True,
-            'displaynames' : True,
-            'searchname' : "Dark Vador",
-            'index': 0,
-            'groupfirst' : 3,
+            'info' : False,
+            'displaynames' : False,
+            'searchname' : None,
+            'index': None,
+            'groupfirst' : None,
+            'byage' : 45,
         }
         return o
     
 if __name__ == '__main__':
     args = parse_arguments()    
     launch_analysis(args.datafile, args.byparty, args.info, args.displaynames,
-                   args.searchname, args.index, args.groupfirst) ##todo: faire du packing/unpacking pour tous ces arguments?
+                   args.searchname, args.index, args.groupfirst, args.byage) ##todo: faire du packing/unpacking pour tous ces arguments?

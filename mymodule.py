@@ -7,6 +7,15 @@ import seaborn as sns
 
 import pprint
 
+import datetime as dt
+
+AGE_COLUMN_NAME = "age"                 # Name of the new column (containing the age of the MP) 
+                                        # to create in the dataframe
+AGE_YEARS_COLUMN_NAME = "age_in_years"
+BIRTH_COLUMN_NAME = "birth"
+
+MINIMUM_MP_AGE = 18                     # Minimum age to be allowed to be a MP in France
+
 class SetOfParliamentMember:
     ALL_REGISTERED_PARTIES = [] # This is a class attribute
 
@@ -140,9 +149,72 @@ class SetOfParliamentMember:
             result[party] = len(mps_of_this_party)
             
         return result
+
+    @staticmethod
+    def display_histogram(values):
+        fig, ax = plt.subplots()
+        ax.hist(values, bins = 20)
+        plt.title("Ages ({} MPs)".format(len(values)))
+        plt.show() 
+        
+    def _compute_age_column(self):   
+        now = dt.datetime.now()
+        data = self.dataframe
+        
+        # In data, the column "date_naissance"  still contains string (ex:"1945-08-10")
+        # We first have to convert this to a column of type datetime.
+        if not BIRTH_COLUMN_NAME in data.columns:
+            data[BIRTH_COLUMN_NAME] = \
+                data["date_naissance"].apply(lambda string: dt.datetime.strptime(string,"%Y-%m-%d"))
+        
+        if not AGE_COLUMN_NAME in data.columns:
+            data[AGE_COLUMN_NAME] = data[BIRTH_COLUMN_NAME].apply(lambda date: now-date)
+            
+        # Here is an other way to fill a column of a dataframe (less elegant than the previous ones!):
+        new_column = []
+        for age in data[AGE_COLUMN_NAME]:
+            # age is of type datetime.timedelta (because it was 
+            # calculated from a difference between two dates)
+            # Here, we want to convert it to an integer containing
+            # the the age, expressed in years.
+            age_in_years = int(age.days / 365)
+            new_column += [age_in_years]
+        data[AGE_YEARS_COLUMN_NAME] = new_column
+    
+    def split_by_age(self, age_split):
+        data = self.dataframe    
+        self._compute_age_column()
+        self.display_histogram(data[AGE_YEARS_COLUMN_NAME].values)
+        
+        result = {}
+        
+        if age_split < MINIMUM_MP_AGE:
+            categ = "Under (or equal) {} years old".format(MINIMUM_MP_AGE)
+            s = SetOfParliamentMember(categ)
+            s.data_from_dataframe(data)
+            result = {categ : s}
+        
+        else:
+            categ1 = "Under (or equal) {} years old".format(age_split)
+            categ2 = "Over {} years old".format(age_split)
+            s1, s2 = SetOfParliamentMember(categ1), SetOfParliamentMember(categ2)
+            condition = data[AGE_YEARS_COLUMN_NAME] <= age_split
+            data1 = data[condition]
+            data2 = data[~condition]
+            s1.data_from_dataframe(data1)
+            s2.data_from_dataframe(data2)
+            result = {
+                categ1 : s1,
+                categ2 : s2
+            }
+            
+        return result
         
 
-def launch_analysis(data_file, by_party = False):
+def launch_analysis(data_file, 
+                    by_party = False, info = False, displaynames = False, 
+                    searchname = None, index = None, groupfirst = None, by_age = None):
+
     sopm = SetOfParliamentMember("All MPs")
     sopm.data_from_csv(os.path.join("data",data_file))
     sopm.display_chart()
@@ -150,9 +222,54 @@ def launch_analysis(data_file, by_party = False):
     if by_party:
         for party, s in sopm.split_by_political_party().items():
             s.display_chart()
+            
+    if info:
+        print()
+        print(repr(sopm))
+        
+    if displaynames:
+        print()
+        print(sopm)
+        
+    if searchname != None:
+        is_present = searchname in sopm
+        print()
+        print("Testing if {} is present: {}".format(searchname, is_present))
+        
+    if index is not None:
+        print()
+        pprint.pprint(sopm[index]) # prints the dict a nice way
+        
+    if groupfirst is not None:
+        parties = sopm.split_by_political_party()
+        parties = parties.values()
+        parties_by_size = sorted(parties, reverse = True)
+        
+        print()
+        print("Info: the {} biggest groups are :".format(groupfirst))
+        for p in parties_by_size[0:groupfirst]:
+            print(p.name)
+            
+        s = sum(parties_by_size[0:groupfirst])
+            
+        s.display_chart()
+        
+    if by_age is not None:
+        by_age = int(by_age)  # by_age was still a string, passed by the command line
+        for age_group, s in sopm.split_by_age(by_age).items():
+            print()
+            print("-" * 50)
+            print(age_group + ":")
+            s.display_chart()
+            print()
+            print("{} : Distribution by party:".format(age_group))
+            print()
+            pprint.pprint(s.number_mp_by_party())
 
 if NOTEBOOK: # bah oui, dans la case précédente on a jarté du code (pour lisibilité), faut bien le remettre à un moment!
     SetOfParliamentMember.__init__                 = Sauv.__init__
+    SetOfParliamentMember.data_from_csv            = Sauv.data_from_csv
+    SetOfParliamentMember.data_from_dataframe      = Sauv.data_from_dataframe
     SetOfParliamentMember.display_chart            = Sauv.display_chart
     SetOfParliamentMember.split_by_political_party = Sauv.split_by_political_party
     SetOfParliamentMember.__repr__                 = Sauv.__repr__
@@ -164,4 +281,9 @@ if NOTEBOOK: # bah oui, dans la case précédente on a jarté du code (pour lisi
     SetOfParliamentMember.__radd__                 = Sauv.__radd__
     SetOfParliamentMember.__lt__                   = Sauv.__lt__
     SetOfParliamentMember.__gt__                   = Sauv.__gt__
+    SetOfParliamentMember.number_of_mps            = Sauv.number_of_mps
+    SetOfParliamentMember._register_parties        = Sauv._register_parties
+    SetOfParliamentMember.get_all_registered_parties  = Sauv.get_all_registered_parties
+    SetOfParliamentMember._group_two_lists_of_parties = Sauv._group_two_lists_of_parties
+    SetOfParliamentMember.number_mp_by_party       = Sauv.number_mp_by_party
     Sauv = SetOfParliamentMember
