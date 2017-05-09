@@ -8,14 +8,20 @@ import seaborn as sns
 import pprint
 
 class SetOfParliamentMember:
+    ALL_REGISTERED_PARTIES = [] # This is a class attribute
+
     def __init__(self, name):
         self.name = name
         
     def data_from_csv(self, csv_file):
         self.dataframe = pd.read_csv(csv_file, sep=";")
+        parties = self.dataframe["parti_ratt_financier"].dropna().values
+        self._register_parties(parties)
         
     def data_from_dataframe(self, dataframe):
         self.dataframe = dataframe
+        parties = self.dataframe["parti_ratt_financier"].dropna().values
+        self._register_parties(parties)
         
     def display_chart(self):
         data = self.dataframe
@@ -102,17 +108,39 @@ class SetOfParliamentMember:
     def __gt__(self, other):
         return self.number_of_mps > other.number_of_mps
     
-    # The following 2 methods are a way to simulate a calculated attribute 
-    # (attribute 'number_of_mps' is calculated from attribute 'seld.dataframe')
-    # There is a much better way to do it, using decorator '@property'
-    def __getattr__(self, attr):
-        if attr == "number_of_mps": ##todo: faire la version avec @property
-            return len(self.dataframe)
+    ## todo: Attention ici, supprimer les anciennes méthodes __getattr__ et __setattr__ pour qu'elles n'interfèrent pas
+    ## avec @property
+    
+    @property
+    def number_of_mps(self):
+        return len(self.dataframe)
         
-    def __setattr__(self, attr, value):
-        if attr == "number_of_mps":
-            raise Exception("You can not set the number of MPs!") 
-        self.__dict__[attr] = value ## todo: c'est l'occasion de parler de __dict__ dans le cours ;)
+    @number_of_mps.setter
+    def number_of_mps(self, value):
+        raise Exception("You can not set the number of MPs!") 
+        
+    @classmethod
+    def _register_parties(cl, parties):
+        cl.ALL_REGISTERED_PARTIES = cl._group_two_lists_of_parties(cl.all_registered_parties, list(parties))
+        
+    @classmethod
+    def get_all_registered_parties(cl):
+        return cl.ALL_REGISTERED_PARTIES
+        
+    @staticmethod
+    def _group_two_lists_of_parties(original, new):
+        return list(set(original + new)) # This line drop duplicates in the list 'original + new'
+    
+    def number_mp_by_party(self):
+        data = self.dataframe
+        
+        result = {}
+        for party in self.get_all_registered_parties():
+            mps_of_this_party = data[data["parti_ratt_financier"] == party]
+            result[party] = len(mps_of_this_party)
+            
+        return result
+        
 
 def launch_analysis(data_file, by_party = False):
     sopm = SetOfParliamentMember("All MPs")
@@ -125,8 +153,15 @@ def launch_analysis(data_file, by_party = False):
 
 if NOTEBOOK: # bah oui, dans la case précédente on a jarté du code (pour lisibilité), faut bien le remettre à un moment!
     SetOfParliamentMember.__init__                 = Sauv.__init__
-    SetOfParliamentMember.data_from_csv            = Sauv.data_from_csv
-    SetOfParliamentMember.data_from_dataframe      = Sauv.data_from_dataframe
     SetOfParliamentMember.display_chart            = Sauv.display_chart
     SetOfParliamentMember.split_by_political_party = Sauv.split_by_political_party
+    SetOfParliamentMember.__repr__                 = Sauv.__repr__
+    SetOfParliamentMember.__str__                  = Sauv.__str__
+    SetOfParliamentMember.__len__                  = Sauv.__len__
+    SetOfParliamentMember.__getitem__              = Sauv.__getitem__
+    SetOfParliamentMember.__contains__             = Sauv.__contains__
+    SetOfParliamentMember.__add__                  = Sauv.__add__
+    SetOfParliamentMember.__radd__                 = Sauv.__radd__
+    SetOfParliamentMember.__lt__                   = Sauv.__lt__
+    SetOfParliamentMember.__gt__                   = Sauv.__gt__
     Sauv = SetOfParliamentMember
