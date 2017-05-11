@@ -1,13 +1,13 @@
-import pandas as pd
-from matplotlib import pyplot as plt
-import numpy as np
-# The following line is a bit magical: it makes matplolib graph
-# more beautiful by modifying the default style
-import seaborn as sns
-
+import os
 import pprint
-
 import datetime as dt
+
+import pandas as pd
+import matplotlib
+matplotlib.use('TkAgg') # you need this if you are on MacOS
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns # Pimp my Matplotlib
 
 AGE_COLUMN_NAME = "age"                 # Name of the new column (containing the age of the MP) 
                                         # to create in the dataframe
@@ -130,7 +130,7 @@ class SetOfParliamentMember:
         
     @classmethod
     def _register_parties(cl, parties):
-        cl.ALL_REGISTERED_PARTIES = cl._group_two_lists_of_parties(cl.all_registered_parties, list(parties))
+        cl.ALL_REGISTERED_PARTIES = cl._group_two_lists_of_parties(cl.ALL_REGISTERED_PARTIES, list(parties))
         
     @classmethod
     def get_all_registered_parties(cl):
@@ -265,25 +265,3 @@ def launch_analysis(data_file,
             print("{} : Distribution by party:".format(age_group))
             print()
             pprint.pprint(s.number_mp_by_party())
-
-if NOTEBOOK: # bah oui, dans la case précédente on a jarté du code (pour lisibilité), faut bien le remettre à un moment!
-    SetOfParliamentMember.__init__                 = Sauv.__init__
-    SetOfParliamentMember.data_from_csv            = Sauv.data_from_csv
-    SetOfParliamentMember.data_from_dataframe      = Sauv.data_from_dataframe
-    SetOfParliamentMember.display_chart            = Sauv.display_chart
-    SetOfParliamentMember.split_by_political_party = Sauv.split_by_political_party
-    SetOfParliamentMember.__repr__                 = Sauv.__repr__
-    SetOfParliamentMember.__str__                  = Sauv.__str__
-    SetOfParliamentMember.__len__                  = Sauv.__len__
-    SetOfParliamentMember.__getitem__              = Sauv.__getitem__
-    SetOfParliamentMember.__contains__             = Sauv.__contains__
-    SetOfParliamentMember.__add__                  = Sauv.__add__
-    SetOfParliamentMember.__radd__                 = Sauv.__radd__
-    SetOfParliamentMember.__lt__                   = Sauv.__lt__
-    SetOfParliamentMember.__gt__                   = Sauv.__gt__
-    SetOfParliamentMember.number_of_mps            = Sauv.number_of_mps
-    SetOfParliamentMember._register_parties        = Sauv._register_parties
-    SetOfParliamentMember.get_all_registered_parties  = Sauv.get_all_registered_parties
-    SetOfParliamentMember._group_two_lists_of_parties = Sauv._group_two_lists_of_parties
-    SetOfParliamentMember.number_mp_by_party       = Sauv.number_mp_by_party
-    Sauv = SetOfParliamentMember
