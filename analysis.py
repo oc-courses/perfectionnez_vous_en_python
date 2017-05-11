@@ -7,7 +7,7 @@ matplotlib.use('TkAgg') # you need this if you are on MacOS
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns # Pimp my Matplotlib
-
+#import pdb
 
 class SetOfParliamentMember:
     def __init__(self, name):
@@ -57,7 +57,7 @@ class SetOfParliamentMember:
         return result
 
     def __str__(self):
-        names = [] ## todo: remplacer à la fin par une compréhension
+        names = [] ## todo: remplacer a la fin par une comprehension
         for row_index, mp in self.dataframe.iterrows(): ##todo: ici il y a du packing/unpacking
             names += [mp.nom]
         return str(names) # Python knows how to convert a list into a string
@@ -95,7 +95,7 @@ class SetOfParliamentMember:
         s.data_from_dataframe(df)
         return s
     
-    def __radd__(self, other): ## todo: l'implementation de cette méthode ne suit à mon avis pas les bonnes pratiques
+    def __radd__(self, other): ## todo: l'implementation de cette methode ne suit a mon avis pas les bonnes pratiques
         return self
     
     def __lt__(self, other):
