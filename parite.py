@@ -1,28 +1,25 @@
+import argparse
+import analysis as an
+import logging as lg
+
 def parse_arguments():
+    parser = argparse.ArgumentParser()
     
-    if not NOTEBOOK:
-        parser = argparse.ArgumentParser()
-        
-        parser.add_argument("-d","--datafile",help="""CSV file containing pieces of 
-            information about the members of parliament""")
-        parser.add_argument("-p","--byparty",action='store_true',help="displays a graph for each political party")
-        
-        return parser.parse_args()
+    parser.add_argument("-d","--datafile",help="""CSV file containing pieces of 
+        information about the members of parliament""")
+    parser.add_argument("-p","--byparty", action='store_false', help="""displays 
+        a graph for each political party""")
     
-    else: ## todo: A enlever. Ici on triche car ArgumentParser est innutilisable dans un notebook
-        class foo:
-            pass
-        o = foo()
-        o.__dict__ = {
-            'datafile' : "current_mps.csv",
-            'byparty' : True,
-        }
-        return o
+    return parser.parse_args()
+
+def main():
+    args = parse_arguments()    
+    an.launch_analysis(args.datafile, args.byparty) ##todo: faire du packing/unpacking pour tous ces arguments?
     
 if __name__ == '__main__':
-    args = parse_arguments()    
-    launch_analysis(args.datafile, args.byparty)
-
-    
-if NOTEBOOK:
-    Sauv = SetOfParliamentMember # sauvegarde de la classe
+    try:
+        main()
+    except:
+        lg.critical('You should use a flag.')
+    finally:
+        print('------------------ End of analysis -----------------')
