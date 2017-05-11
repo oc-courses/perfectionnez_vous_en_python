@@ -1,3 +1,6 @@
+import os
+import logging as lg
+
 def launch_analysis(data_file):
     
     # If data_file is an absolute path, then the folder "data" is ignored
@@ -19,4 +22,4 @@ def launch_analysis(data_file):
         print("Ow :( The file was not found. Here is the original message of the exception :")
         # e is a FileNotFoundError, which is also an Exception (by inheritance).
         # print(e) prints the error message (which is a string) of this Exception.
-        print(e)
+        lg.error(e)
