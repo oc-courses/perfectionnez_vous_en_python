@@ -122,7 +122,7 @@ class SetOfParliamentMember:
         
     @classmethod
     def _register_parties(cl, parties):
-        cl.ALL_REGISTERED_PARTIES = cl._group_two_lists_of_parties(cl.all_registered_parties, list(parties))
+        cl.ALL_REGISTERED_PARTIES = cl._group_two_lists_of_parties(cl.ALL_REGISTERED_PARTIES, list(parties))
         
     @classmethod
     def get_all_registered_parties(cl):
