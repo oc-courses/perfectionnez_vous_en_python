@@ -14,9 +14,10 @@ def parse_arguments():
 def main():
     args = parse_arguments()    
     an.launch_analysis(args.datafile, args.byparty)
-    Sauv = SetOfParliamentMember # sauvegarde de la classe
+    Sauv = an.SetOfParliamentMember # sauvegarde de la classe
 
 if __name__ == '__main__':
+    main()
     try:
         main()
     except:

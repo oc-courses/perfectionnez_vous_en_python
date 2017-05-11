@@ -1,9 +1,11 @@
+import os
+
 import pandas as pd
-from matplotlib import pyplot as plt
+import matplotlib
+matplotlib.use('TkAgg') # you need this if you are on MacOS
+import matplotlib.pyplot as plt
 import numpy as np
-# The following line is a bit magical: it makes matplolib graph
-# more beautiful by modifying the default style
-import seaborn as sns
+import seaborn as sns # Pimp my Matplotlib
 
 class SetOfParliamentMember:
     def __init__(self, name):
