@@ -41,7 +41,7 @@ class SetOfParliamentMember:
         result = {}
         data = self.dataframe
         
-        # These 2 syntaxes are equivalent : data.parti_ratt_financier and data['parti_ratt_financier']
+        # These 2 syntaxes are equivalent: data.parti_ratt_financier and data['parti_ratt_financier']
         all_parties = data["parti_ratt_financier"].dropna().unique()
             
         for party in all_parties:
@@ -53,11 +53,11 @@ class SetOfParliamentMember:
         return result
 
 
-# def launch_analysis(data_file, by_party = False):
-#     sopm = SetOfParliamentMember("All MPs")
-#     sopm.data_from_csv(os.path.join("data",data_file))
-#     sopm.display_chart()
+def launch_analysis(data_file, by_party = False):
+    sopm = SetOfParliamentMember("All MPs")
+    sopm.data_from_csv(os.path.join("data",data_file))
+    sopm.display_chart()
     
-#     if by_party:
-#         for party, s in sopm.split_by_political_party().items():
-#             s.display_chart()
+    if by_party:
+        for party, s in sopm.split_by_political_party().items():
+            s.display_chart()
