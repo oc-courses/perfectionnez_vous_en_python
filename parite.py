@@ -26,7 +26,6 @@ def main():
                    args.searchname, args.index, args.groupfirst) ##todo: faire du packing/unpacking pour tous ces arguments?
     
 if __name__ == '__main__':
-    main()
     try:
         main()
     except:
