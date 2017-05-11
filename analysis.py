@@ -1,11 +1,12 @@
-import pandas as pd
-from matplotlib import pyplot as plt
-import numpy as np
-# The following line is a bit magical: it makes matplolib graph
-# more beautiful by modifying the default style
-import seaborn as sns
-
+import os
 import pprint
+
+import pandas as pd
+import matplotlib
+matplotlib.use('TkAgg') # you need this if you are on MacOS
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns # Pimp my Matplotlib
 
 class SetOfParliamentMember:
     ALL_REGISTERED_PARTIES = [] # This is a class attribute
@@ -142,7 +143,10 @@ class SetOfParliamentMember:
         return result
         
 
-def launch_analysis(data_file, by_party = False):
+def launch_analysis(data_file, 
+                    by_party = False, info = False, displaynames = False, 
+                    searchname = None, index = None, groupfirst = None):
+
     sopm = SetOfParliamentMember("All MPs")
     sopm.data_from_csv(os.path.join("data",data_file))
     sopm.display_chart()
@@ -150,18 +154,34 @@ def launch_analysis(data_file, by_party = False):
     if by_party:
         for party, s in sopm.split_by_political_party().items():
             s.display_chart()
-
-if NOTEBOOK: # bah oui, dans la case précédente on a jarté du code (pour lisibilité), faut bien le remettre à un moment!
-    SetOfParliamentMember.__init__                 = Sauv.__init__
-    SetOfParliamentMember.display_chart            = Sauv.display_chart
-    SetOfParliamentMember.split_by_political_party = Sauv.split_by_political_party
-    SetOfParliamentMember.__repr__                 = Sauv.__repr__
-    SetOfParliamentMember.__str__                  = Sauv.__str__
-    SetOfParliamentMember.__len__                  = Sauv.__len__
-    SetOfParliamentMember.__getitem__              = Sauv.__getitem__
-    SetOfParliamentMember.__contains__             = Sauv.__contains__
-    SetOfParliamentMember.__add__                  = Sauv.__add__
-    SetOfParliamentMember.__radd__                 = Sauv.__radd__
-    SetOfParliamentMember.__lt__                   = Sauv.__lt__
-    SetOfParliamentMember.__gt__                   = Sauv.__gt__
-    Sauv = SetOfParliamentMember
+            
+    if info:
+        print()
+        print(repr(sopm))
+        
+    if displaynames:
+        print()
+        print(sopm)
+        
+    if searchname != None:
+        is_present = searchname in sopm
+        print()
+        print("Testing if {} is present: {}".format(searchname, is_present))
+        
+    if index is not None:
+        print()
+        pprint.pprint(sopm[index]) # prints the dict a nice way
+        
+    if groupfirst is not None:
+        parties = sopm.split_by_political_party()
+        parties = parties.values()
+        parties_by_size = sorted(parties, reverse = True)
+        
+        print()
+        print("Info: the {} biggest groups are :".format(groupfirst))
+        for p in parties_by_size[0:groupfirst]:
+            print(p.name)
+            
+        s = sum(parties_by_size[0:groupfirst])
+            
+        s.display_chart()
