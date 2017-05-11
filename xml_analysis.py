@@ -1,14 +1,76 @@
-## todo: je ne sais pas si c'est très "classe", mais moi j'ai bien envie
-## de leur faire tester du code qui va potentiellemnt faire planter leur ordi,
-## pour qu'il se rendent compte du problème, problème que l'on va chercher à résoudre
-## ensuite
+from lxml import etree  
 
-from lxml import etree
-import os
+def get_report():
+    
+    report = """
+        <CompteRendu>
+            <MetaDonnees>
+                <DateSeance>12 oct 2029</DateSeance>
+            </MetaDonnees>
+            <Contenu>
+                <paragraphe>
+                    <Orateur>
+                        <NOM>Monsieur Gentil</NOM>
+                    </Orateur>
+                    <Texte>
+                        Je suis gentil, et vous êtes méchant!
+                    </Texte>
+                </paragraphe>
+                <paragraphe>
+                    <Orateur>
+                        <NOM>Monsieur Mechant</NOM>
+                    </Orateur>
+                    <Texte>
+                        Je suis méchant oui, mais j'assume!
+                    </Texte>
+                </paragraphe>
+            </Contenu>
+            <UneAutreBalise>
+                Blablabla 1
+            </UneAutreBalise>
+            <EncoreUneAutreBalise>
+                Blablabla 2
+                <br/>
+                Blablabla 3
+                <italic>
+                    Blablabla 4
+                </italic>
+            </EncoreUneAutreBalise>
+        </CompteRendu>
+    """
 
-I_KNOW_WHAT_I_M_DOING = False
-
-# Caution : This code might need a lot of time and ressources for your computer
-# Save any unsaved work
-if I_KNOW_WHAT_I_M_DOING:
-    etree.XML(os.path.join("data","SyceronBrut.xml"))
+    return report
+       
+def search():
+        
+    report_str = get_report()
+    
+    report = etree.XML(report_str)
+        
+    # A report should always have 2 children:
+    # - a 'MetaDonnees' tag
+    # - a 'Contenu' tag
+    # In case it would contain more than these 2 children, we collect these
+    # other parts in the list *other_parts (which will normally always be an empty list)
+    metadata, content, *other_parts = report 
+    
+    print("Date : {}".format(metadata.find("DateSeance").text))
+    
+    for paragraph in content.iterchildren():
+        speaker = paragraph[0]
+        text = paragraph[1]
+        
+        print("-" * 80)
+        print("New paragraph. Speaker : {}".format(speaker.find("NOM").text))
+        print(text.text)
+    
+    print("-" * 80)
+    
+    for other_part in other_parts:
+        print("Other parts were found :")
+        for text in other_part.itertext():
+            print(text)
+    
+        
+if __name__ == '__main__': 
+    search()
