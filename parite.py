@@ -17,7 +17,6 @@ def main():
     Sauv = an.SetOfParliamentMember # sauvegarde de la classe
 
 if __name__ == '__main__':
-    main()
     try:
         main()
     except:
