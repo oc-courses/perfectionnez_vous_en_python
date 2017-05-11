@@ -86,7 +86,7 @@ class SetOfParliamentMember:
     
     def __getitem__(self, index):
         try:
-            result = dict(self.dataframe.ix[index])
+            result = dict(self.dataframe.iloc[index])
         except:
             if index < 0:
                 raise Exception("Please select a positive index")
