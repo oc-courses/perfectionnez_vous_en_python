@@ -7,6 +7,7 @@ matplotlib.use('TkAgg') # you need this if you are on MacOS
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns # Pimp my Matplotlib
+import pdb
 
 class SetOfParliamentMember:
     ALL_REGISTERED_PARTIES = [] # This is a class attribute
@@ -77,6 +78,7 @@ class SetOfParliamentMember:
         return mp_name in self.dataframe["nom"].values
     
     def __getitem__(self, index):
+        index = int(index)
         try:
             result = dict(self.dataframe.iloc[index])
         except:
@@ -173,8 +175,10 @@ def launch_analysis(data_file,
         pprint.pprint(sopm[index]) # prints the dict a nice way
         
     if groupfirst is not None:
+        groupfirst = int(groupfirst)
         parties = sopm.split_by_political_party()
         parties = parties.values()
+        pdb.set_trace()
         parties_by_size = sorted(parties, reverse = True)
         
         print()
