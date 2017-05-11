@@ -1,3 +1,5 @@
+import os
+
 def launch_analysis(data_file):
     
     # If data_file is an absolute path, then the folder "data" is ignored
