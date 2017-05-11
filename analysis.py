@@ -20,6 +20,4 @@ def launch_analysis(data_file):
         
     except FileNotFoundError as e:
         print("Ow :( The file was not found. Here is the original message of the exception :")
-        # e is a FileNotFoundError, which is also an Exception (by inheritance).
-        # print(e) prints the error message (which is a string) of this Exception.
         lg.error(e)
