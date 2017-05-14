@@ -8,19 +8,16 @@ def launch_analysis(data_file):
 
     file_name = os.path.basename(path_to_file)
     directory = os.path.dirname(path_to_file)
-    print("Opening data file {} from directory '{}'".format(file_name,directory))
+    lg.info("Opening data file {} from directory '{}'".format(file_name,directory))
 
     try:
         with open(path_to_file,"r") as f:
             preview = f.readline()
-        print("Yeah! We managed to read the file. Here is a preview:")
-        print(preview)
-
+            lg.debug("Yeah! We managed to read the file. Here is a preview:{%s}" % preview)
     except FileNotFoundError as e:
-        print("Ow :( The file was not found. Here is the original message of the exception :")
-        lg.error(e)
+        lg.critical("Ow :( The file was not found. Here is the original message of the exception : {%s}" % e)
     except:
-        print('Another error')
+        lg.critical('Destination unknown')
 
 if __name__ == "__main__":
     launch_analysis('current_mps.csv')
