@@ -1,3 +1,4 @@
 env/*
-__pycache__/*
+__pycache__/
 data/*
+analysis/__pycache__/
