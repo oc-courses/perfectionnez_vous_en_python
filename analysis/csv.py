@@ -8,9 +8,14 @@ matplotlib.use('TkAgg') # you need this if you are on MacOS
 import matplotlib.pyplot as plt
 import numpy as np
 
+import pdb
+
 class SetOfParliamentMember:
     def __init__(self, name):
         self.name = name
+
+    def total_mps(self):
+        return len(self.dataframe)
 
     def data_from_csv(self, csv_file):
         lg.info("Opening data file {}".format(csv_file))
@@ -57,10 +62,10 @@ class SetOfParliamentMember:
         return result
 
     def __str__(self):
-        names = [] ## todo: remplacer a la fin par une comprehension
+        names = []
         for row_index, mp in self.dataframe.iterrows(): ##todo: ici il y a du packing/unpacking
             names += [mp.nom]
-        return str(names) # Python knows how to convert a list into a string
+        return str(names)
 
     def __repr__(self):
         return "Set of {} MPs".format(len(self.dataframe))
@@ -87,7 +92,7 @@ class SetOfParliamentMember:
         if not isinstance(other, SetOfParliamentMember):
             raise Exception("Can not add a SetOfParliamentMember with an object of type {}".format(type(other)))
 
-        df1, df2 = self.dataframe, other.dataframe ##todo: ici il y a du packing/unpacking
+        df1, df2 = self.dataframe, other.dataframe ## packing / unpacking
         df = df1.append(df2)
         df = df.drop_duplicates()
 
@@ -95,7 +100,7 @@ class SetOfParliamentMember:
         s.data_from_dataframe(df)
         return s
 
-    def __radd__(self, other): ## todo: l'implementation de cette methode ne suit a mon avis pas les bonnes pratiques
+    def __radd__(self, other):
         return self
 
     def __lt__(self, other):
@@ -108,7 +113,7 @@ class SetOfParliamentMember:
     # (attribute 'number_of_mps' is calculated from attribute 'seld.dataframe')
     # There is a much better way to do it, using decorator '@property'
     def __getattr__(self, attr):
-        if attr == "number_of_mps": ##todo: faire la version avec @property
+        if attr == "number_of_mps":
             return len(self.dataframe)
 
     def __setattr__(self, attr, value):
@@ -146,6 +151,7 @@ def launch_analysis(data_file,
         pprint.pprint(sopm[index]) # prints the dict a nice way
 
     if groupfirst is not None:
+        groupfirst = int(groupfirst)
         parties = sopm.split_by_political_party()
         parties = parties.values()
         parties_by_size = sorted(parties, reverse = True)
