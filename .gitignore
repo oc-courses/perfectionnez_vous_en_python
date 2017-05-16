@@ -1,3 +1,4 @@
 env/*
 __pycache__/*
 data/SyceronBrut.xml
+analysis/__pycache__/
