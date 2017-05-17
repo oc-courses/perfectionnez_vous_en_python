@@ -1,4 +1,9 @@
+#! /usr/bin/env python3
+# coding: utf-8
+
 import os
+import pprint
+import logging as lg
 
 import pandas as pd
 import matplotlib
@@ -6,6 +11,8 @@ matplotlib.use('TkAgg') # you need this if you are on MacOS
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns # Pimp my Matplotlib
+
+import pdb
 
 class SetOfParliamentMember:
     def __init__(self, name):
@@ -63,3 +70,6 @@ def launch_analysis(data_file, by_party = False):
     if by_party:
         for party, s in sopm.split_by_political_party().items():
             s.display_chart()
+
+if __name__ == "__main__":
+    launch_analysis('current_mps.csv')
