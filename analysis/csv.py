@@ -246,6 +246,7 @@ def launch_analysis(data_file,
         pprint.pprint(sopm[index]) # prints the dict a nice way
 
     if groupfirst is not None:
+        groupfirst = int(groupfirst)
         parties = sopm.split_by_political_party()
         parties = parties.values()
         parties_by_size = sorted(parties, reverse = True)
