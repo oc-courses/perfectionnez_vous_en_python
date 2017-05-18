@@ -8,7 +8,7 @@ import analysis.xml as x_an
 def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument("-d","--datafile",help="""CSV file containing pieces of information about the members of parliament""")
-    parser.add_argument("-e", "--extension", help="""Type file to analyse. Is it a CSV of an XML?""")
+    parser.add_argument("-e", "--extension", help="""King of of file to analyse. Is it a CSV of an XML?""")
     return parser.parse_args()
 
 if __name__ == '__main__':
@@ -17,4 +17,3 @@ if __name__ == '__main__':
         x_an.launch_analysis(args.datafile)
     elif args.extension == 'csv':
         c_an.launch_analysis(args.datafile)
-import pdb; pdb.set_trace()
