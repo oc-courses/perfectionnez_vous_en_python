@@ -260,6 +260,7 @@ def launch_analysis(data_file,
         s.display_chart()
 
     if by_age is not None:
+        groupfirst = int(groupfirst)
         by_age = int(by_age)  # by_age was still a string, passed by the command line
         for age_group, s in sopm.split_by_age(by_age).items():
             print()
