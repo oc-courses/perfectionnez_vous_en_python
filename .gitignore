@@ -2,3 +2,5 @@ env/*
 __pycache__/*
 data/*
 analysis/__pycache__/*
+analysis/xml.pyc
+analysis/csv.pyc
