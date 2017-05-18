@@ -145,6 +145,7 @@ def launch_analysis(data_file,
         print("Testing if {} is present: {}".format(searchname, is_present))
 
     if index is not None:
+        index = int(index)
         print()
         pprint.pprint(sopm[index]) # prints the dict a nice way
 
