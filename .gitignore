@@ -1,4 +1,7 @@
 env/*
 __pycache__/*
 data/SyceronBrut.xml
-anaysis/__pycache__/
+analysis/__pycache__/
+analysis/__init__.pyc
+analysis/xml.pyc
+analysis/csv.pyc
