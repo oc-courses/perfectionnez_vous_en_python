@@ -37,7 +37,6 @@ if __name__ == '__main__':
     except Warning as e:
         lg.warning(e)
     else:
-        #import pdb; pdb.set_trace()
         e = re.search('^.+\.(\D{3})$', args.datafile)
         extension = e.group(1)
         if extension == 'xml':
