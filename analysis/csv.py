@@ -63,7 +63,7 @@ class SetOfParliamentMember:
         return str(names) # Python knows how to convert a list into a string
 
     def __repr__(self):
-        return "Set of {} MPs".format(len(self.dataframe))
+        return "SetOfParliamentMember: {} members".format(len(self.dataframe))
 
     def __len__(self):
         return self.number_of_mps
