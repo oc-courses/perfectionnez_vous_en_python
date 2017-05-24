@@ -35,22 +35,25 @@ def parse_arguments():
     parser.add_argument("-g", "--groupfirst", help="""displays a graph groupping all the 'g'
         biggest political parties""")
     return parser.parse_args()
-
-if __name__ == '__main__':
-    ARGS = parse_arguments()
+  
+def main():
+    args = parse_arguments()
     try:
-        DATAFILE = ARGS.datafile
-        if DATAFILE is None:
+        datafile = ARGS.datafile
+        if datafile is None:
             raise Warning('You must indicate a datafile!')
     except Warning as exception:
         lg.warning(exception)
     else:
-        e = re.search('^.+\.(\D{3})$', ARGS.datafile)
-        EXTENSION = e.group(1)
-        if EXTENSION == 'xml':
-            x_an.launch_analysis(DATAFILE)
-        elif EXTENSION == 'csv':
-            c_an.launch_analysis(DATAFILE, ARGS.byparty, ARGS.info, ARGS.displaynames,
-                           ARGS.searchname, ARGS.index, ARGS.groupfirst, ARGS.byage)
+        e = re.search('^.+\.(\D{3})$', args.datafile)
+        extension = e.group(1)
+        if extension == 'xml':
+            x_an.launch_analysis(datafile)
+        elif extension == 'csv':
+            c_an.launch_analysis(datafile, args.byparty, args.info, args.displaynames,
+                           args.searchname, args.index, args.groupfirst, args.byage)
     finally:
         lg.info('#################### Analysis is over ######################')
+
+if __name__ == '__main__':
+    main()
