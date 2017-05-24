@@ -28,7 +28,7 @@ def parse_arguments():
     #        between those who are over and those who are under the value of --byage""")
     return parser.parse_args()
 
-if __name__ == '__main__':
+def main():
     args = parse_arguments()
     try:
         datafile = args.datafile
@@ -46,3 +46,6 @@ if __name__ == '__main__':
                            args.searchname, args.index, args.groupfirst, args.byage)
     finally:
         lg.info('#################### Analysis is over ######################')
+
+if __name__ == '__main__':
+    main()
