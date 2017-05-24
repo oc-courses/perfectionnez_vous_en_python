@@ -1,8 +1,6 @@
 #! /usr/bin/env python3
 # coding: utf-8
-
 import argparse
-import logging as lg
 
 import analysis.csv as c_an
 import analysis.xml as x_an
@@ -15,7 +13,7 @@ def parse_arguments():
     parser.add_argument("-v", "--verbose", action='store_true', help="""Make the application talk!""")
     return parser.parse_args()
 
-if __name__ == '__main__':
+def main():
     args = parse_arguments()
     if args.verbose:
         lg.basicConfig(level=lg.DEBUG)
@@ -36,3 +34,6 @@ if __name__ == '__main__':
                 lg.info('#################### Analysis is over ######################')
     except Warning as e:
         lg.warning(e)
+
+if __name__ == "__main__":
+    main()
