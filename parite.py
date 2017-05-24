@@ -19,7 +19,7 @@ def parse_arguments():
     
     return parser.parse_args()
 
-if __name__ == '__main__':
+def main():
     args = parse_arguments()
     try:
         datafile = args.datafile
@@ -34,3 +34,6 @@ if __name__ == '__main__':
             c_an.launch_analysis(datafile, args.byparty)
     finally:
         lg.info('#################### Analysis is over ######################')
+
+if __name__ == '__main__':
+    main()
