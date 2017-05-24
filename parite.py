@@ -19,16 +19,20 @@ if __name__ == '__main__':
     args = parse_arguments()
     if args.verbose:
         lg.basicConfig(level=lg.DEBUG)
+
     try:
         datafile = args.datafile
         if datafile == None:
             raise Warning('You must indicate a datafile!')
+        else:
+            try:
+                if args.extension == 'xml':
+                    x_an.launch_analysis(datafile)
+                elif args.extension == 'csv':
+                    c_an.launch_analysis(datafile)
+            except FileNotFoundError as e:
+                print("Ow :( The file was not found. Here is the original message of the exception :", e)
+            finally:
+                lg.info('#################### Analysis is over ######################')
     except Warning as e:
         lg.warning(e)
-    else:
-        if args.extension == 'xml':
-            x_an.launch_analysis(datafile)
-        elif args.extension == 'csv':
-            c_an.launch_analysis(datafile)
-    finally:
-        lg.info('#################### Analysis is over ######################')
