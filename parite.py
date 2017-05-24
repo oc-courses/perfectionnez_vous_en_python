@@ -26,7 +26,7 @@ def parse_arguments():
         biggest political parties""")
     return parser.parse_args()
 
-if __name__ == '__main__':
+def main():
     args = parse_arguments()
     try:
         datafile = args.datafile
@@ -42,3 +42,6 @@ if __name__ == '__main__':
                            args.searchname, args.index, args.groupfirst)
     finally:
         lg.info('#################### Analysis is over ######################')
+
+if __name__ == '__main__':
+    main()
