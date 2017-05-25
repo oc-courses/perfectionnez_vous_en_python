@@ -45,7 +45,7 @@ def main():
     except Warning as exception:
         lg.warning(exception)
     else:
-        e = re.search('^.+\.(\D{3})$', args.datafile)
+        e = re.search(r'^.+\.(\D{3})$', args.datafile)
         extension = e.group(1)
         if extension == 'xml':
             x_an.launch_analysis(datafile)
