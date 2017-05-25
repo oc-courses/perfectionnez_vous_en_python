@@ -30,28 +30,33 @@ def parse_arguments():
         the names of all the mps""")
     parser.add_argument("-s", "--searchname", help="""search for a mp name""")
     parser.add_argument("-I", "--index", help="""displays information about the Ith mp""")
-    parser.add_argument("-a","--byage", help="""displays a graph for the MPs splitted
+    parser.add_argument("-a", "--byage", help="""displays a graph for the MPs splitted
     #        between those who are over and those who are under the value of --byage""")
     parser.add_argument("-g", "--groupfirst", help="""displays a graph groupping all the 'g'
         biggest political parties""")
     return parser.parse_args()
-  
+
 def main():
+    """
+    Main instructions to run
+    """
     args = parse_arguments()
     try:
-        datafile = ARGS.datafile
+        datafile = args.datafile
         if datafile is None:
             raise Warning('You must indicate a datafile!')
     except Warning as exception:
         lg.warning(exception)
     else:
-        e = re.search(r'^.+\.(\D{3})$', args.datafile)
-        extension = e.group(1)
+        res = re.search(r'^.+\.(\D{3})$', args.datafile)
+        extension = res.group(1)
         if extension == 'xml':
             x_an.launch_analysis(datafile)
         elif extension == 'csv':
-            c_an.launch_analysis(datafile, args.byparty, args.info, args.displaynames,
-                           args.searchname, args.index, args.groupfirst, args.byage)
+            c_an.launch_analysis(datafile, \
+            args.byparty, args.info, args.displaynames, \
+            args.searchname, args.index, args.groupfirst, \
+            args.byage)
     finally:
         lg.info('#################### Analysis is over ######################')
 
