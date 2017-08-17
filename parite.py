@@ -13,7 +13,7 @@ def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument("-d","--datafile",help="""CSV file containing pieces of
         information about the members of parliament""")
-    parser.add_argument("-e", "--extension", help="""King of of file to analyse. Is it a CSV of an XML?""")
+    parser.add_argument("-e", "--extension", help="""Kind of file to analyse. Is it a CSV or an XML?""")
     parser.add_argument("-p","--byparty", action='store_true', help="""displays
         a graph for each political party""")
     parser.add_argument("-i","--info", action='store_true', help="""information about
